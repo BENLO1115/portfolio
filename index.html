@@ -106,7 +106,7 @@
   .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .menu-card {
     background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2);
-    padding: 32px 24px; transition: all .3s;
+    padding: 28px 24px; transition: all .3s; text-align: center;
   }
   .menu-card:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); transform: translateY(-4px); }
   .menu-emoji { font-size: 38px; margin-bottom: 16px; }
@@ -215,9 +215,9 @@
 
     .hero h1 { font-size: 44px; letter-spacing: 10px; }
     .hero-h1-en { font-size: 14px; letter-spacing: 3px; }
-    .hero-tag { font-size: 12px; letter-spacing: 4px; }
-    .hero-sub { font-size: 15px; letter-spacing: 2px; }
-    .hero-sub-en { font-size: 12px; }
+    .hero-tag { font-size: 11px; letter-spacing: 2px; }
+    .hero-sub { font-size: 15px; letter-spacing: 1px; }
+    .hero-sub-en { font-size: 12px; letter-spacing: 0px; }
     .hero-btns { flex-direction: column; align-items: center; gap: 12px; width: 80%; }
     .btn-primary, .btn-outline { width: 100%; justify-content: center; font-size: 15px; }
 
@@ -243,6 +243,7 @@
 
     footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 24px; }
     .footer-text { text-align: center; }
+    .watermark { font-size: 10px; left: 8px; right: 8px; text-align: center; bottom: 8px; }
 
     .modal { padding: 32px 20px; }
     .modal-title { font-size: 24px; }
@@ -361,88 +362,52 @@
       <div class="menu-card">
         <div class="menu-emoji">🥩</div>
         <div class="menu-name">三杯杏鮑菇雞</div>
-        <div class="menu-name-en">Three-Cup Mushroom Chicken</div>
-        <div class="menu-desc">選用放山雞腿肉，搭配九層塔香氣，三杯醬汁鹹甜入味，下飯首選。</div>
-        <div class="menu-desc-en">Free-range chicken thigh with fresh basil, braised in classic three-cup sauce — sweet, savory, and perfect with rice.</div>
         <div class="menu-price">$220</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🐟</div>
         <div class="menu-name">清蒸鮮魚</div>
-        <div class="menu-name-en">Steamed Fresh Fish</div>
-        <div class="menu-desc">每日直送當季海魚，清蒸保留原汁原味，淋上特調醬油提香。</div>
-        <div class="menu-desc-en">Daily fresh seasonal fish, steamed to preserve natural flavor and drizzled with house soy sauce.</div>
         <div class="menu-price">$280</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🥬</div>
         <div class="menu-name">蒜炒時蔬</div>
-        <div class="menu-name-en">Garlic Stir-Fried Greens</div>
-        <div class="menu-desc">每日早晨採購當地有機蔬菜，大火快炒，清爽不油膩。</div>
-        <div class="menu-desc-en">Locally sourced organic vegetables, wok-tossed with garlic over high heat — light and refreshing.</div>
         <div class="menu-price">$120</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🍲</div>
         <div class="menu-name">招牌紅燒肉</div>
-        <div class="menu-name-en">Signature Braised Pork</div>
-        <div class="menu-desc">慢燉三小時，入口即化，搭配古早味滷蛋與豆干，是老饕的最愛。</div>
-        <div class="menu-desc-en">Slow-braised for three hours until melt-in-your-mouth tender. Served with marinated egg and tofu.</div>
         <div class="menu-price">$260</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🥚</div>
         <div class="menu-name">番茄炒蛋</div>
-        <div class="menu-name-en">Tomato & Egg Stir-Fry</div>
-        <div class="menu-desc">台灣家常經典，使用牛番茄與放山雞蛋，酸甜鹹香，勾起兒時記憶。</div>
-        <div class="menu-desc-en">A Taiwanese household classic — beefsteak tomatoes and free-range eggs stir-fried to sweet, savory perfection.</div>
         <div class="menu-price">$150</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🍜</div>
         <div class="menu-name">手工麵線羹</div>
-        <div class="menu-name-en">Handmade Vermicelli Soup</div>
-        <div class="menu-desc">大骨熬製八小時高湯，加入蚵仔、肉羹，滑順濃郁，每日限量供應。</div>
-        <div class="menu-desc-en">Eight-hour bone broth with oysters and meat rolls — silky, rich, and available in limited portions daily.</div>
         <div class="menu-price">$95</div>
       </div>
       <div class="menu-divider">飲料 DRINKS</div>
       <div class="menu-card">
         <div class="menu-emoji">🧋</div>
         <div class="menu-name">珍珠奶茶</div>
-        <div class="menu-name-en">Bubble Milk Tea</div>
-        <div class="menu-desc">濃郁紅茶底，搭配新鮮鮮奶，Q彈珍珠現煮，香甜順口。</div>
-        <div class="menu-desc-en">Rich black tea base with fresh milk and freshly cooked chewy tapioca pearls.</div>
-        <div class="menu-options">
-          <span class="menu-option-tag">全糖／半糖／少糖／無糖</span>
-          <span class="menu-option-tag">正常冰／少冰／去冰／熱</span>
-        </div>
         <div class="menu-price">$65</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🍵</div>
         <div class="menu-name">烏龍茶</div>
-        <div class="menu-name-en">Oolong Tea</div>
-        <div class="menu-desc">精選台灣高山烏龍，茶香清雅，回甘持久，每日現泡。</div>
-        <div class="menu-desc-en">Premium Taiwanese high-mountain oolong, freshly brewed daily — delicate aroma with a lasting finish.</div>
-        <div class="menu-options">
-          <span class="menu-option-tag">全糖／半糖／少糖／無糖</span>
-          <span class="menu-option-tag">正常冰／少冰／去冰／熱</span>
-        </div>
         <div class="menu-price">$55</div>
       </div>
       <div class="menu-card">
         <div class="menu-emoji">🫖</div>
         <div class="menu-name">紅茶</div>
-        <div class="menu-name-en">Black Tea</div>
-        <div class="menu-desc">嚴選錫蘭紅茶，色澤深琥珀，茶味醇厚，最純粹的選擇。</div>
-        <div class="menu-desc-en">Premium Ceylon black tea — deep amber color, full-bodied flavor, the purest choice.</div>
-        <div class="menu-options">
-          <span class="menu-option-tag">全糖／半糖／少糖／無糖</span>
-          <span class="menu-option-tag">正常冰／少冰／去冰／熱</span>
-        </div>
         <div class="menu-price">$50</div>
       </div>
+    </div>
+    <div style="text-align:center; margin-top:36px;">
+      <a href="#" class="btn-primary" onclick="openMenu(event)" style="display:inline-flex;">查看完整菜單<span class="en">View Full Menu</span></a>
     </div>
   </div>
 </div>
