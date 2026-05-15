@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排班自動化服務 — 羅本謙</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:  #00b894;
+      --dark:   #1e2a2a;
+      --text:   #333;
+      --dim:    #777;
+      --bg:     #f7f9f8;
+      --card:   #ffffff;
+      --border: #e5ebe8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', 'PingFang TC', sans-serif; }
+
+    /* ── Navbar ── */
+    nav {
+      position: sticky; top: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 6%;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .logo { font-size: 1rem; font-weight: 700; color: var(--dark); }
+    .logo span { color: var(--green); }
+    .nav-cta {
+      padding: .55rem 1.4rem; border-radius: 6px;
+      background: var(--green); color: #fff;
+      font-size: .9rem; font-weight: 600;
+      text-decoration: none; transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── Hero ── */
+    #hero {
+      text-align: center;
+      padding: 6rem 6% 5rem;
+      background: linear-gradient(160deg, #e8f8f3 0%, #f7f9f8 60%);
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: .3rem 1rem; border-radius: 20px;
+      background: rgba(0,184,148,0.12); color: var(--green);
+      font-size: .8rem; font-weight: 600; letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+    }
+    #hero h1 {
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      font-weight: 900; line-height: 1.2;
+      color: var(--dark); margin-bottom: 1.2rem;
+    }
+    #hero h1 span { color: var(--green); }
+    #hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--dim); max-width: 580px;
+      margin: 0 auto 2.5rem; line-height: 1.8;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      padding: .8rem 2rem; border-radius: 8px;
+      font-size: 1rem; font-weight: 600;
+      text-decoration: none; transition: .2s;
+    }
+    .btn-main { background: var(--green); color: #fff; }
+    .btn-main:hover { opacity: .85; transform: translateY(-2px); }
+    .btn-ghost { border: 2px solid var(--dark); color: var(--dark); }
+    .btn-ghost:hover { background: var(--dark); color: #fff; }
+
+    /* ── Section 共用 ── */
+    section { padding: 5rem 6%; }
+    .section-label {
+      font-size: .75rem; letter-spacing: 3px; font-weight: 700;
+      color: var(--green); text-transform: uppercase; margin-bottom: .6rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800; color: var(--dark); margin-bottom: 1rem;
+    }
+    .section-sub { color: var(--dim); line-height: 1.8; max-width: 560px; margin-bottom: 3rem; }
+
+    /* ── 痛點 ── */
+    #pain { background: var(--dark); color: #fff; }
+    #pain .section-title { color: #fff; }
+    #pain .section-label { color: var(--green); }
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem; margin-top: 2.5rem;
+    }
+    .pain-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 1.5rem;
+    }
+    .pain-icon { font-size: 2rem; margin-bottom: .8rem; }
+    .pain-card h3 { font-size: 1rem; color: #fff; margin-bottom: .4rem; }
+    .pain-card p { font-size: .88rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    /* ── 服務流程 ── */
+    .steps { display: flex; flex-direction: column; gap: 1.5rem; max-width: 680px; }
+    .step { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .step-num {
+      flex-shrink: 0;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--green); color: #fff;
+      font-size: 1.1rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-body h3 { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: .3rem; }
+    .step-body p { font-size: .9rem; color: var(--dim); line-height: 1.7; }
+
+    /* ── 適合對象 ── */
+    #target { background: #edfaf5; }
+    .target-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem; margin-top: 2.5rem;
+    }
+    .target-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; text-align: center;
+      transition: border-color .2s, transform .2s;
+    }
+    .target-card:hover { border-color: var(--green); transform: translateY(-3px); }
+    .target-icon { font-size: 2.2rem; margin-bottom: .6rem; }
+    .target-card p { font-size: .9rem; font-weight: 600; color: var(--dark); }
+
+    /* ── 案例 ── */
+    .case-box {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; max-width: 800px;
+    }
+    .case-box h3 { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem; }
+    .before-list, .after-list { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .before-list li::before { content: '✗  '; color: #e74c3c; }
+    .after-list  li::before { content: '✓  '; color: var(--green); }
+    .before-list li, .after-list li { font-size: .9rem; color: var(--dim); line-height: 1.6; }
+
+    /* ── 收費 ── */
+    #pricing { background: var(--dark); }
+    #pricing .section-title { color: #fff; }
+    #pricing .section-label { color: var(--green); }
+    .price-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem; margin-top: 2.5rem; max-width: 800px;
+    }
+    .price-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 2rem;
+      transition: border-color .2s;
+    }
+    .price-card.featured {
+      border-color: var(--green);
+      background: rgba(0,184,148,0.08);
+    }
+    .price-tag {
+      display: inline-block; padding: .2rem .7rem;
+      border-radius: 20px; font-size: .7rem; font-weight: 700;
+      background: var(--green); color: #fff; margin-bottom: 1rem;
+    }
+    .price-card h3 { font-size: 1.1rem; color: #fff; margin-bottom: .5rem; }
+    .price-amount { font-size: 2rem; font-weight: 900; color: var(--green); margin-bottom: 1rem; }
+    .price-amount span { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.4); }
+    .price-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .price-list li { font-size: .88rem; color: rgba(255,255,255,0.6); }
+    .price-list li::before { content: '· '; color: var(--green); }
+
+    /* ── CTA ── */
+    #contact { text-align: center; }
+    .cta-box {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 20px; padding: 3.5rem 2rem;
+      max-width: 560px; margin: 0 auto;
+    }
+    .cta-box h2 { font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-bottom: .8rem; }
+    .cta-box p { color: var(--dim); line-height: 1.8; margin-bottom: 2rem; }
+    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .contact-link {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .7rem 1.5rem; border-radius: 8px;
+      border: 1.5px solid var(--border); color: var(--text);
+      text-decoration: none; font-size: .9rem; font-weight: 600;
+      transition: .2s;
+    }
+    .contact-link:hover { border-color: var(--green); color: var(--green); }
+
+    footer {
+      text-align: center; padding: 1.8rem;
+      color: var(--dim); font-size: .8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── RWD ── */
+    @media (max-width: 768px) {
+      section { padding: 3.5rem 5%; }
+      .case-box { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 300px; text-align: center; }
+    }
+    @media (max-width: 400px) {
+      #hero h1 { font-size: 1.9rem; }
+      .cta-box { padding: 2rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div class="logo">羅本謙 <span>/ 自動化服務</span></div>
+  <a href="#contact" class="nav-cta">免費諮詢</a>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-badge">📊 Excel 排班自動化</div>
+  <h1>每個月手排班表？<br><span>讓它自動跑出來。</span></h1>
+  <p>我幫你把現在手動排班的流程，轉化成一支自動產生 Excel 的工具。<br>員工清單改一改，按一下，本月排班表完成。</p>
+  <div class="hero-btns">
+    <a href="#contact" class="btn btn-main">立即諮詢（免費）</a>
+    <a href="#how" class="btn btn-ghost">了解流程</a>
+  </div>
+</section>
+
+<!-- 痛點 -->
+<section id="pain">
+  <p class="section-label">// 你現在的痛苦</p>
+  <h2 class="section-title">手排班表，每個月都在重複做</h2>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-icon">⏰</div>
+      <h3>耗時費力</h3>
+      <p>每個月花好幾個小時在 Excel 裡面移格子、算天數，做完一次又來一次。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">😤</div>
+      <h3>員工一換班就要重排</h3>
+      <p>一個人請假或換班，整張表就要重算，牽一髮動全身。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">📋</div>
+      <h3>格式不統一</h3>
+      <p>不同人做出來的排班表格式都不一樣，新人看不懂，老闆看得頭痛。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🔢</div>
+      <h3>算錯工時</h3>
+      <p>手動加總容易出錯，薪資計算時發現問題才回來改，麻煩又沒效率。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 流程 -->
+<section id="how">
+  <p class="section-label">// 怎麼運作</p>
+  <h2 class="section-title">三步驟，問題解決</h2>
+  <p class="section-sub">不需要懂程式，不需要改任何設定，你只要做一件事。</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>告訴我你的規則</h3>
+        <p>幾個班別、幾個員工、每班幾人、特殊假日規定——我來了解你們公司現在怎麼排的。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>我幫你做成自動化工具</h3>
+        <p>把你的規則刻進程式，確認格式符合你的需求，測試沒問題才交給你。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>每個月你只要跑一下</h3>
+        <p>更新員工清單，執行一行指令，當月排班表 Excel 自動產出，格式固定、工時自動算。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 適合對象 -->
+<section id="target">
+  <p class="section-label">// 適合誰</p>
+  <h2 class="section-title">只要有排班需求就適合</h2>
+  <div class="target-grid">
+    <div class="target-card"><div class="target-icon">🍜</div><p>餐廳／飲料店</p></div>
+    <div class="target-card"><div class="target-icon">🏪</div><p>零售門市</p></div>
+    <div class="target-card"><div class="target-icon">🏨</div><p>旅宿業</p></div>
+    <div class="target-card"><div class="target-icon">💆</div><p>美容美髮</p></div>
+    <div class="target-card"><div class="target-icon">🏭</div><p>工廠／倉儲</p></div>
+    <div class="target-card"><div class="target-icon">🏥</div><p>診所／藥局</p></div>
+  </div>
+</section>
+
+<!-- 案例 -->
+<section id="case">
+  <p class="section-label">// 實際案例</p>
+  <h2 class="section-title">餐廳排班自動化</h2>
+  <p class="section-sub">10 名員工、三班制、每月手排約需 3 小時。導入自動化後：</p>
+  <div class="case-box">
+    <div>
+      <h3>❌ 導入前</h3>
+      <ul class="before-list">
+        <li>每月花 2～3 小時手動排班</li>
+        <li>Excel 格式每次都不一樣</li>
+        <li>工時要另外用計算機加總</li>
+        <li>員工換班要整張重排</li>
+        <li>主管壓力大，容易出錯</li>
+      </ul>
+    </div>
+    <div>
+      <h3>✅ 導入後</h3>
+      <ul class="after-list">
+        <li>每月排班只需 10 分鐘</li>
+        <li>格式統一，員工一看就懂</li>
+        <li>工時自動計算，月底直接用</li>
+        <li>換班只改員工清單，秒更新</li>
+        <li>主管專心管店，不用耗在 Excel</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 收費 -->
+<section id="pricing">
+  <p class="section-label">// 收費方式</p>
+  <h2 class="section-title">透明報價，沒有隱藏費用</h2>
+  <div class="price-grid">
+    <div class="price-card">
+      <h3>基本版</h3>
+      <div class="price-amount">$1,500 <span>起</span></div>
+      <ul class="price-list">
+        <li>固定班別、固定人數</li>
+        <li>自動產生月排班 Excel</li>
+        <li>工時統計</li>
+        <li>一次交付，教你怎麼用</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <span class="price-tag">最多人選</span>
+      <h3>客製版</h3>
+      <div class="price-amount">$2,500 <span>起</span></div>
+      <ul class="price-list">
+        <li>完全依照你們公司規則</li>
+        <li>特殊假日、換班邏輯</li>
+        <li>多部門、多班別支援</li>
+        <li>後續規則調整維護</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <h3>維護方案</h3>
+      <div class="price-amount">$100 <span>/ 次</span></div>
+      <ul class="price-list">
+        <li>員工異動更新</li>
+        <li>規則調整修改</li>
+        <li>新增功能需求</li>
+        <li>交付後 30 天免費調整</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 聯絡 -->
+<section id="contact">
+  <p class="section-label">// 開始合作</p>
+  <h2 class="section-title">免費諮詢，不收費</h2>
+  <div class="cta-box">
+    <h2>說說你的需求</h2>
+    <p>告訴我你現在怎麼排班、有幾個人、幾個班別，<br>我評估後給你明確的報價與時程。</p>
+    <div class="contact-links">
+      <a href="mailto:robertlo588@gmail.com" class="contact-link">📧 robertlo588@gmail.com</a>
+      <a href="tel:0973619091" class="contact-link">📞 0973-619-091</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 羅本謙 · 排班自動化服務 · All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
