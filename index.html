@@ -106,15 +106,30 @@
   .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .menu-card {
     background: rgba(255,255,255,0.05); border: 1px solid rgba(201,168,76,0.2);
-    padding: 28px 24px; transition: all .3s; text-align: center;
+    padding: 28px 24px; transition: border-color .3s, background .3s; text-align: center;
+    cursor: pointer; user-select: none;
   }
-  .menu-card:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); transform: translateY(-4px); }
-  .menu-emoji { font-size: 38px; margin-bottom: 16px; }
-  .menu-name { color: #fff; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .menu-name-en { color: rgba(255,255,255,0.4); font-size: 13px; letter-spacing: 1px; margin-bottom: 10px; }
-  .menu-desc { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.7; margin-bottom: 6px; }
-  .menu-desc-en { color: rgba(255,255,255,0.3); font-size: 13px; line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+  .menu-card:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.5); }
+  .menu-card.open { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .menu-emoji { font-size: 40px; margin-bottom: 14px; }
+  .menu-name { color: #fff; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
   .menu-price { color: var(--gold); font-size: 22px; font-weight: 700; }
+  .menu-toggle { color: rgba(201,168,76,0.5); font-size: 12px; margin-top: 10px; letter-spacing: 2px; display: block; transition: transform .3s; }
+  .menu-card.open .menu-toggle { transform: rotate(180deg); }
+  .menu-card-detail {
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height .35s ease, opacity .3s ease, margin .3s ease;
+    margin-top: 0; border-top: 0 solid rgba(201,168,76,0.2);
+    text-align: left;
+  }
+  .menu-card.open .menu-card-detail {
+    max-height: 300px; opacity: 1;
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid rgba(201,168,76,0.2);
+  }
+  .menu-desc { color: rgba(255,255,255,0.55); font-size: 14px; line-height: 1.8; margin-bottom: 8px; }
+  .menu-desc-en { color: rgba(255,255,255,0.3); font-size: 12px; line-height: 1.7; font-style: italic; }
+  .menu-name-en { color: rgba(255,255,255,0.35); font-size: 12px; letter-spacing: 1px; margin-bottom: 8px; display: block; }
   .menu-divider {
     grid-column: 1 / -1; color: var(--gold); font-size: 14px; letter-spacing: 6px;
     padding: 28px 0 12px; border-bottom: 1px solid rgba(201,168,76,0.2);
@@ -359,54 +374,41 @@
       <div class="section-title-en">Signature Dishes</div>
     </div>
     <div class="menu-grid">
-      <div class="menu-card">
-        <div class="menu-emoji">🥩</div>
-        <div class="menu-name">三杯杏鮑菇雞</div>
-        <div class="menu-price">$220</div>
-      </div>
-      <div class="menu-card">
-        <div class="menu-emoji">🐟</div>
-        <div class="menu-name">清蒸鮮魚</div>
-        <div class="menu-price">$280</div>
-      </div>
-      <div class="menu-card">
-        <div class="menu-emoji">🥬</div>
-        <div class="menu-name">蒜炒時蔬</div>
-        <div class="menu-price">$120</div>
-      </div>
-      <div class="menu-card">
+      <div class="menu-card" onclick="toggleCard(this)">
         <div class="menu-emoji">🍲</div>
         <div class="menu-name">招牌紅燒肉</div>
         <div class="menu-price">$260</div>
+        <span class="menu-toggle">▼</span>
+        <div class="menu-card-detail">
+          <span class="menu-name-en">Signature Braised Pork Belly</span>
+          <div class="menu-desc">慢燉三小時，入口即化，搭配古早味滷蛋與豆干，是老饕的最愛。</div>
+          <div class="menu-desc-en">Slow-braised for three hours until melt-in-your-mouth tender. Served with marinated egg and tofu.</div>
+        </div>
       </div>
-      <div class="menu-card">
-        <div class="menu-emoji">🥚</div>
-        <div class="menu-name">番茄炒蛋</div>
-        <div class="menu-price">$150</div>
+      <div class="menu-card" onclick="toggleCard(this)">
+        <div class="menu-emoji">🥩</div>
+        <div class="menu-name">三杯杏鮑菇雞</div>
+        <div class="menu-price">$220</div>
+        <span class="menu-toggle">▼</span>
+        <div class="menu-card-detail">
+          <span class="menu-name-en">Three-Cup Mushroom Chicken</span>
+          <div class="menu-desc">選用放山雞腿肉，搭配九層塔香氣，三杯醬汁鹹甜入味，下飯首選。</div>
+          <div class="menu-desc-en">Free-range chicken thigh with fresh basil, braised in classic three-cup sauce.</div>
+        </div>
       </div>
-      <div class="menu-card">
-        <div class="menu-emoji">🍜</div>
-        <div class="menu-name">手工麵線羹</div>
-        <div class="menu-price">$95</div>
-      </div>
-      <div class="menu-divider">飲料 DRINKS</div>
-      <div class="menu-card">
-        <div class="menu-emoji">🧋</div>
-        <div class="menu-name">珍珠奶茶</div>
-        <div class="menu-price">$65</div>
-      </div>
-      <div class="menu-card">
-        <div class="menu-emoji">🍵</div>
-        <div class="menu-name">烏龍茶</div>
-        <div class="menu-price">$55</div>
-      </div>
-      <div class="menu-card">
-        <div class="menu-emoji">🫖</div>
-        <div class="menu-name">紅茶</div>
-        <div class="menu-price">$50</div>
+      <div class="menu-card" onclick="toggleCard(this)">
+        <div class="menu-emoji">🐟</div>
+        <div class="menu-name">清蒸鮮魚</div>
+        <div class="menu-price">$280</div>
+        <span class="menu-toggle">▼</span>
+        <div class="menu-card-detail">
+          <span class="menu-name-en">Steamed Fresh Fish</span>
+          <div class="menu-desc">每日直送當季海魚，清蒸保留原汁原味，淋上特調醬油提香。</div>
+          <div class="menu-desc-en">Daily fresh seasonal fish, steamed to preserve natural flavor and drizzled with house soy sauce.</div>
+        </div>
       </div>
     </div>
-    <div style="text-align:center; margin-top:36px;">
+    <div style="text-align:center; margin-top:40px;">
       <a href="#" class="btn-primary" onclick="openMenu(event)" style="display:inline-flex;">查看完整菜單<span class="en">View Full Menu</span></a>
     </div>
   </div>
@@ -676,6 +678,9 @@
 </div>
 
 <script>
+  function toggleCard(card) {
+    card.classList.toggle('open');
+  }
   function toggleNav() {
     document.getElementById('hamburger').classList.toggle('open');
     document.getElementById('navDrawer').classList.toggle('open');
