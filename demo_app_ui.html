@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>預約 App UI 示範</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -221,6 +222,20 @@
     color: rgba(255,255,255,0.3);
     font-size: 12px;
     letter-spacing: 2px;
+  }
+
+  @media (max-width: 680px) {
+    body { padding: 36px 20px; }
+    h1 { font-size: 22px; letter-spacing: 2px; }
+    .subtitle { font-size: 12px; margin-bottom: 36px; }
+    .showcase { gap: 48px; }
+    .phone { width: 260px; }
+  }
+
+  @media (max-width: 380px) {
+    body { padding: 28px 12px; }
+    .phone { width: 240px; }
+    h1 { font-size: 20px; }
   }
 </style>
 </head>
